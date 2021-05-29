@@ -1,40 +1,63 @@
 // TODO: Include packages needed for this application
 const fs = require("fs");
 const inquirer = require("inquirer");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
+const Engineer1 = require("./lib/Engineer");
+const Intern1 = require("./lib/Intern");
 const Manager = require("./lib/Manager");
-const FilePath = "./dist/Generated.html";
+const filePath = "./dist/Generated.html";
 
-function generateHTMLfile() {
-  const html1 = `<!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Team Profile Generator</title>
-      </head>
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
-        crossorigin="anonymous"
-      />
-      <body>
-        <div class = "jumbotron bg-danger">
-            <h1 class = "text-center text-light">
-                My Team
-            </h1>
-        </div>
-        <div class="col-12 p-1 customBG ">
-            <div class="row p-1 m-1 align-items-center justify-content-center customBG2 ">`;
-  fs.writeFileSync(filePath, html1);
-  addManager();
+function cardData(data) {
+  if (data.getRole() === "Manager") {
+    const managerCard = `
+      <div class="card d-flex flex-wrap m-1 align-items-center justify-content-center">
+        <header>
+          <h3>${data.getManagerName()}</h3>
+          <p>${data.getRole()}</p>
+        </header>
+        <content class="card-content">
+          <p>ID:1</p>
+          <p>
+            Email:<a href="mailto:${data.getEmail()}">${data.getEmail()}</a>
+          </p>
+          <p>Office Number:${data.getOfficeNumber()}</p>
+        </content>
+      </div>`;
+    return managerCard;
+  } else if (data.getRole() === "Engineer") {
+    var engineerCard = `
+    <div class="card d-flex flex-wrap m-1 align-items-center justify-content-center">
+      <header>
+        <h3>${data.getEngineerName()}</h3>
+        <p>${data.getRole()}</p>
+      </header>
+      <content class="card-content">
+        <p>ID:1</p>
+        <p>
+          Email:<a href="mailto:${data.getEmail()}">${data.getEmail()}</a>
+        </p>
+      <p>Github:<a href="https://github.com/${data.getGithub()}">${data.getGithub()}</a></p>
+      </content>
+    </div>
+  );`;
+    return engineerCard;
+  } else if (data.getRole() === "Intern") {
+    var internCard = `
+    <div class="card d-flex flex-wrap m-1 align-items-center justify-content-center">
+    <header>
+      <h3>${data.getInternName()}</h3>
+      <p>${data.getRole()}</p>
+    </header>
+    <content class="card-content">
+      <p>ID:1</p>
+      <p>
+        Email:<a href="mailto:${data.getEmail()}">${data.getEmail()}</a>
+      </p>
+      <p>School:${data.getSchool()}</p>
+    </content>
+  </div>`;
+    return internCard;
+  }
 }
-
-generateHTMLfile();
-
 function addManager() {
   inquirer
     .prompt([
@@ -60,13 +83,13 @@ function addManager() {
       },
     ])
     .then((answer) => {
-      const Manager = new Manager(
+      const manager = new Manager(
         answer.ManagerName,
         answer.Id,
         answer.Email,
         answer.School
       );
-      fs.appendFileSync(FilePath, cardData(Manager)), rerun();
+      fs.appendFileSync(filePath, cardData(manager)), rerun();
     });
 }
 
@@ -101,7 +124,7 @@ function addEngineer() {
         answer.Email,
         answer.School
       );
-      fs.appendFileSync(FilePath, cardData(Engineer)), rerun();
+      fs.appendFileSync(filePath, cardData(Engineer)), rerun();
     });
 }
 
@@ -136,7 +159,7 @@ function addIntern() {
         answer.Email,
         answer.School
       );
-      fs.appendFileSync(FilePath, cardData(Intern)), rerun();
+      fs.appendFileSync(filePath, cardData(Intern)), rerun();
     });
 }
 
@@ -158,7 +181,7 @@ function rerun() {
       if (answers.Nextup === "Done adding?") {
         fs.appendFileSync(filePath, html2);
         console.log(
-          "HTML file succesfully generated, can be find in 'dist' directory filenamed as myTeam.html"
+          "HTML file succesfully generated, can be find in 'dist' directory filenamed as output.html"
         );
       } else if (answers.Nextup === "Engineer") {
         addEngineer();
@@ -167,3 +190,32 @@ function rerun() {
       }
     });
 }
+
+function generateHTMLfile() {
+  const html1 = `<!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Team Profile Generator</title>
+        </head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+          crossorigin="anonymous"
+        />
+        <body>
+          <div class = "jumbotron bg-danger">
+              <h1 class = "text-center text-light">
+                  My Team
+              </h1>
+          </div>
+          <div class="col-12 p-1 customBG ">
+              <div class="row p-1 m-1 align-items-center justify-content-center customBG2 ">`;
+  fs.writeFileSync(filePath, html1);
+  addManager();
+}
+
+generateHTMLfile();
