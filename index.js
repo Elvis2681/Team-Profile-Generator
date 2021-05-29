@@ -1,8 +1,8 @@
 // TODO: Include packages needed for this application
 const fs = require("fs");
 const inquirer = require("inquirer");
-const Engineer1 = require("./lib/Engineer");
-const Intern1 = require("./lib/Intern");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
 const filePath = "./dist/Generated.html";
 
@@ -118,13 +118,13 @@ function addEngineer() {
       },
     ])
     .then((answer) => {
-      const Engineer = new Engineer(
+      const engineer = new Engineer(
         answer.EngineerName,
         answer.Id,
         answer.Email,
         answer.School
       );
-      fs.appendFileSync(filePath, cardData(Engineer)), rerun();
+      fs.appendFileSync(filePath, cardData(engineer)), rerun();
     });
 }
 
@@ -133,7 +133,7 @@ function addIntern() {
     .prompt([
       {
         type: "input",
-        message: "What is the Team Engineer's name?",
+        message: "What is the Intern's name?",
         name: "InternName",
       },
       {
@@ -153,13 +153,13 @@ function addIntern() {
       },
     ])
     .then((answer) => {
-      const Intern = new Intern(
+      const intern = new Intern(
         answer.InternName,
         answer.Id,
         answer.Email,
         answer.School
       );
-      fs.appendFileSync(filePath, cardData(Intern)), rerun();
+      fs.appendFileSync(filePath, cardData(intern)), rerun();
     });
 }
 
@@ -178,14 +178,14 @@ function rerun() {
 </div>
 </body>
 </html>`;
-      if (answers.Nextup === "Done adding?") {
+      if (answers.NextUp === "Done adding?") {
         fs.appendFileSync(filePath, html2);
         console.log(
           "HTML file succesfully generated, can be find in 'dist' directory filenamed as output.html"
         );
-      } else if (answers.Nextup === "Engineer") {
+      } else if (answers.NextUp === "Engineer") {
         addEngineer();
-      } else if (answers.Nextup === "Intern") {
+      } else if (answers.NextUp === "Intern") {
         addIntern();
       }
     });
